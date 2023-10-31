@@ -30,6 +30,45 @@ public class SouvenirManager {
         Manufacturer manufacturer = new Manufacturer(name, country);
         manufacturers.add(manufacturer);
     }
+    public void updateSouvenir(int souvenirIndex, String name, Manufacturer manufacturerDetails, LocalDate releaseDate, double price) {
+        if (souvenirIndex >= 0 && souvenirIndex < souvenirs.size()) {
+            Souvenir souvenir = souvenirs.get(souvenirIndex);
+            souvenir.setName(name);
+            souvenir.setManufacturerDetails(manufacturerDetails);
+            souvenir.setReleaseDate(releaseDate);
+            souvenir.setPrice(price);
+        } else {
+            System.out.println("Invalid souvenir index. Souvenir not updated.");
+        }
+    }
+
+    public void updateManufacturer(int manufacturerIndex, String name, String country) {
+        if (manufacturerIndex >= 0 && manufacturerIndex < manufacturers.size()) {
+            Manufacturer manufacturer = manufacturers.get(manufacturerIndex);
+            manufacturer.setName(name);
+            manufacturer.setCountry(country);
+        } else {
+            System.out.println("Invalid manufacturer index. Manufacturer not updated.");
+        }
+    }
+    public void updateManufacturerInSouvenirs(Manufacturer oldManufacturer, Manufacturer newManufacturer) {
+        souvenirs.stream()
+                .filter(souvenir -> souvenir.getManufacturerDetails().equals(oldManufacturer))
+                .forEach(souvenir -> souvenir.setManufacturerDetails(newManufacturer));
+
+    }
+
+    public void viewAllSouvenirs() {
+        souvenirs.stream()
+                .map(souvenir -> souvenirs.indexOf(souvenir) + ": " + souvenir)
+                .forEach(System.out::println);
+    }
+
+    public void viewAllManufacturers() {
+        manufacturers.stream()
+                .map(manufacturer -> manufacturers.indexOf(manufacturer) + ": " + manufacturer)
+                .forEach(System.out::println);
+    }
 
     public void viewAll() {
         manufacturers.forEach(manufacturer -> {
@@ -140,4 +179,11 @@ public class SouvenirManager {
         }
     }
 
+    public List<Souvenir> getSouvenirs() {
+        return souvenirs;
+    }
+
+    public List<Manufacturer> getManufacturers() {
+        return manufacturers;
+    }
 }
