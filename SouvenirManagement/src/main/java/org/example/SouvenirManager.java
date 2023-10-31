@@ -28,8 +28,15 @@ public class SouvenirManager {
     }
 
     public void addManufacturer(String name, String country) {
-        Manufacturer manufacturer = new Manufacturer(name, country);
-        manufacturers.add(manufacturer);
+        boolean isDuplicate = manufacturers.stream()
+                .anyMatch(manufacturer -> manufacturer.getName().equals(name) && manufacturer.getCountry().equals(country));
+
+        if (!isDuplicate) {
+            Manufacturer manufacturer = new Manufacturer(name, country);
+            manufacturers.add(manufacturer);
+        } else {
+            System.out.println("Manufacturer with the same name and country already exists.");
+        }
     }
     public void updateSouvenir(int souvenirIndex, String name, Manufacturer manufacturerDetails, LocalDate releaseDate, double price) {
         if (souvenirIndex >= 0 && souvenirIndex < souvenirs.size()) {
@@ -45,9 +52,21 @@ public class SouvenirManager {
 
     public void updateManufacturer(int manufacturerIndex, String name, String country) {
         if (manufacturerIndex >= 0 && manufacturerIndex < manufacturers.size()) {
-            Manufacturer manufacturer = manufacturers.get(manufacturerIndex);
-            manufacturer.setName(name);
-            manufacturer.setCountry(country);
+            Manufacturer oldManufacturer = manufacturers.get(manufacturerIndex);
+            String oldName = oldManufacturer.getName();
+            String oldCountry = oldManufacturer.getCountry();
+
+            boolean isDuplicate = manufacturers.stream()
+                    .anyMatch(manufacturer -> manufacturer.getName().equals(name) && manufacturer.getCountry().equals(country)
+                            && (!manufacturer.getName().equals(oldName) || !manufacturer.getCountry().equals(oldCountry)));
+
+            if (!isDuplicate) {
+                Manufacturer manufacturer = manufacturers.get(manufacturerIndex);
+                manufacturer.setName(name);
+                manufacturer.setCountry(country);
+            } else {
+                System.out.println("Manufacturer with the same name and country already exists.");
+            }
         } else {
             System.out.println("Invalid manufacturer index. Manufacturer not updated.");
         }
