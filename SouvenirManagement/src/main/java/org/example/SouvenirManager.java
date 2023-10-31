@@ -126,7 +126,7 @@ public class SouvenirManager {
         manufacturers.stream()
                 .filter(manufacturer -> {
                     List<Souvenir> manufacturerSouvenirs = souvenirs.stream()
-                            .filter(souvenir -> souvenir.getManufacturerDetails().getName().equals(manufacturer.getName()))
+                            .filter(souvenir -> souvenir.getManufacturerDetails().getName().equals(manufacturer.getName()) && souvenir.getManufacturerDetails().getCountry().equals(manufacturer.getCountry()))
                             .toList();
                     return manufacturerSouvenirs.stream()
                             .anyMatch(souvenir -> souvenir.getName().equals(souvenirName) && souvenir.getReleaseDate().getYear() == year);
