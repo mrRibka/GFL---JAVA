@@ -44,6 +44,7 @@ public class Main {
                         Manufacturer selectedManufacturer = manager.getManufacturers().get(manufacturerIndex);
 
                         System.out.print("Release date (yyyy-MM-dd): ");
+                        scanner.nextLine();
                         String releaseDateStr = scanner.nextLine();
                         LocalDate releaseDate = LocalDate.parse(releaseDateStr);
                         System.out.print("Price: ");
@@ -102,6 +103,7 @@ public class Main {
                         Manufacturer selectedManufacturer = manager.getManufacturers().get(newManufacturerIndex);
 
                         System.out.print("New release date (yyyy-MM-dd): ");
+                        scanner.nextLine();
                         String newReleaseDateStr = scanner.nextLine();
                         LocalDate newReleaseDate = LocalDate.parse(newReleaseDateStr);
                         System.out.print("New price: ");
