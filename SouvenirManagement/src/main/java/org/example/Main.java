@@ -13,19 +13,19 @@ public class Main {
         manager.loadManufacturersFromJson();
         while (true) {
             System.out.println("Select an action:");
-            System.out.println("1. Add a souvenir");
-            System.out.println("2. Add a manufacturer");
+            System.out.println("1. Add manufacturer");
+            System.out.println("2. Add souvenir");
             System.out.println("3. View all manufacturers");
             System.out.println("4. View all souvenirs");
             System.out.println("5. Edit manufacturer");
             System.out.println("6. Edit souvenir");
-            System.out.println("7. View all manufacturers and souvenirs");
+            System.out.println("7. View all manufacturers and their souvenirs");
             System.out.println("8. View souvenirs by manufacturer");
             System.out.println("9. View souvenirs by country");
             System.out.println("10. View manufacturers by price");
             System.out.println("11. View manufacturers by souvenir and release year");
             System.out.println("12. View souvenirs sorted by release year");
-            System.out.println("13. Delete a manufacturer and related souvenirs");
+            System.out.println("13. Delete manufacturer and related souvenirs");
             System.out.println("0. Exit");
 
             int choice = scanner.nextInt();
@@ -33,6 +33,13 @@ public class Main {
 
             switch (choice) {
                 case 1:
+                    System.out.print("Manufacturer name: ");
+                    String manufacturerName = scanner.nextLine();
+                    System.out.print("Manufacturer country: ");
+                    String manufacturerCountry = scanner.nextLine();
+                    manager.addManufacturer(manufacturerName, manufacturerCountry);
+                    break;
+                case 2:
                     System.out.print("Souvenir name: ");
                     String name = scanner.nextLine();
 
@@ -54,14 +61,6 @@ public class Main {
                     } else {
                         System.out.println("Invalid manufacturer index. Souvenir not added.");
                     }
-                    break;
-
-                case 2:
-                    System.out.print("Manufacturer name: ");
-                    String manufacturerName = scanner.nextLine();
-                    System.out.print("Manufacturer country: ");
-                    String manufacturerCountry = scanner.nextLine();
-                    manager.addManufacturer(manufacturerName, manufacturerCountry);
                     break;
                 case 3:
                     manager.viewAllManufacturers();
@@ -118,6 +117,7 @@ public class Main {
                     manager.viewAll();
                     break;
                 case 8:
+                    manager.viewAllManufacturers();
                     System.out.print("Enter manufacturer name: ");
                     manufacturerName = scanner.nextLine();
                     manager.viewSouvenirsByManufacturer(manufacturerName);
@@ -143,6 +143,7 @@ public class Main {
                     manager.viewSouvenirsSortedByYear();
                     break;
                 case 13:
+                    manager.viewAllManufacturers();
                     System.out.print("Enter manufacturer name: ");
                     manufacturerName = scanner.nextLine();
                     manager.deleteManufacturerAndSouvenirs(manufacturerName);
