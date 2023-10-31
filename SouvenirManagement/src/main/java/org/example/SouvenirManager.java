@@ -19,6 +19,7 @@ public class SouvenirManager {
     private List<Manufacturer> manufacturers = new ArrayList<>();
     private static final String SOUVENIRS_JSON_FILENAME = "souvenirs.json";
     private static final String MANUFACTURERS_JSON_FILENAME = "manufacturers.json";
+    private String dataFolderPath = "src/main/resources/";
 
 
     public void addSouvenir(String name, Manufacturer manufacturerDetails, LocalDate releaseDate, double price) {
@@ -141,7 +142,8 @@ public class SouvenirManager {
         try {
             ObjectMapper mapper = new ObjectMapper();
             mapper.registerModule(new JavaTimeModule());
-            mapper.writeValue(new File(SOUVENIRS_JSON_FILENAME), souvenirs);
+            File souvenirsFile = new File(dataFolderPath + SOUVENIRS_JSON_FILENAME);
+            mapper.writeValue(souvenirsFile, souvenirs);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -151,8 +153,11 @@ public class SouvenirManager {
         try {
             ObjectMapper mapper = new ObjectMapper();
             mapper.registerModule(new JavaTimeModule());
-            CollectionType collectionType = mapper.getTypeFactory().constructCollectionType(List.class, Souvenir.class);
-            souvenirs = mapper.readValue(new File(SOUVENIRS_JSON_FILENAME), collectionType);
+            File souvenirsFile = new File(dataFolderPath + SOUVENIRS_JSON_FILENAME);
+            if (souvenirsFile.exists()) {
+                CollectionType collectionType = mapper.getTypeFactory().constructCollectionType(List.class, Souvenir.class);
+                souvenirs = mapper.readValue(souvenirsFile, collectionType);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -162,7 +167,8 @@ public class SouvenirManager {
         try {
             ObjectMapper mapper = new ObjectMapper();
             mapper.registerModule(new JavaTimeModule());
-            mapper.writeValue(new File(MANUFACTURERS_JSON_FILENAME), manufacturers);
+            File manufacturersFile = new File(dataFolderPath + MANUFACTURERS_JSON_FILENAME);
+            mapper.writeValue(manufacturersFile, manufacturers);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -172,8 +178,11 @@ public class SouvenirManager {
         try {
             ObjectMapper mapper = new ObjectMapper();
             mapper.registerModule(new JavaTimeModule());
-            CollectionType collectionType = mapper.getTypeFactory().constructCollectionType(List.class, Manufacturer.class);
-            manufacturers = mapper.readValue(new File(MANUFACTURERS_JSON_FILENAME), collectionType);
+            File manufacturersFile = new File(dataFolderPath + MANUFACTURERS_JSON_FILENAME);
+            if (manufacturersFile.exists()) {
+                CollectionType collectionType = mapper.getTypeFactory().constructCollectionType(List.class, Manufacturer.class);
+                manufacturers = mapper.readValue(manufacturersFile, collectionType);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
