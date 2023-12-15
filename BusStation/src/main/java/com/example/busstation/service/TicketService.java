@@ -44,27 +44,29 @@ public class TicketService {
         List<TicketInfo> tickets = ticketRepository.findTicketInfoByRoute_IdAndIsReturnedFalse(id);
         Route route = routeService.getRouteById(id);
 
-        if (!tickets.isEmpty()) {
-            String routeName = route.getName().replaceAll("[^a-zA-Z0-9.-]", "_");
-            String directoryPath = "boarding_lists";
+        String routeName = route.getName().replaceAll("[^a-zA-Z0-9.-]", "_");
+        String directoryPath = "boarding_lists";
 
-            File directory = new File(directoryPath);
-            if (!directory.exists()) {
-                boolean isDirectoryCreated = directory.mkdirs();
-                if (!isDirectoryCreated) {
-                    throw new RuntimeException("Failed to create directory");
+        File directory = new File(directoryPath);
+        if (!directory.exists()) {
+            boolean isDirectoryCreated = directory.mkdirs();
+            if (!isDirectoryCreated) {
+                throw new RuntimeException("Failed to create directory");
+            }
+        }
+
+        File outputFile = new File(directory, routeName + ".json");
+
+        try {
+            if (!tickets.isEmpty()) {
+                objectMapper.writeValue(outputFile, tickets);
+            } else {
+                if (!outputFile.createNewFile()) {
+                    throw new IOException("Failed to create empty file");
                 }
             }
-
-            File outputFile = new File(directory, routeName + ".json");
-
-            try {
-                objectMapper.writeValue(outputFile, tickets);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else {
-            throw new RuntimeException("No tickets found");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
