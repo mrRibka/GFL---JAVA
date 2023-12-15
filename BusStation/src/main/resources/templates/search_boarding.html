@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Search Boarding</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.2/dist/css/bootstrap.css}">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+        <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link btn btn-outline-primary" th:href="@{/search}">Routes</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link btn btn-outline-warning" th:href="@{/tickets}">Tickets</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link btn btn-outline-success" th:href="@{/boarding}">Boarding List</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-5">
+    <h1>Search Route</h1>
+
+    <form th:action="@{/boarding}" method="post" class="row g-3">
+        <div class="col-auto">
+            <label for="routeName" class="form-label">Route Name:</label>
+            <input type="text" id="routeName" name="routeName" class="form-control" th:value="${routeName}" th:placeholder="${routeName}" required>
+        </div>
+        <div class="col-auto">
+            <button type="submit" class="btn btn-primary">Search</button>
+        </div>
+    </form>
+    <div th:if="${not #lists.isEmpty(routes)}" class="mt-5">
+        <h2>Search Results:</h2>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Date</th>
+                <th>Places Available</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="route : ${routes}">
+                <td>
+                    <a th:text="${route.name}" th:href="@{/boarding/{id}(id=${route.id})}"></a>
+                </td>
+                <td th:text="${#temporals.format(route.stops.get(0).getTime(), ' HH:mm dd-MM-yyyy')}"></td>
+                <td th:text="${route.busType.getMaxCapacity() - route.passengerCount}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div th:if="${routes != null and routes.size() == 0}" class="mt-5">
+        <p>No trips found</p>
+    </div>
+</div>
+
+<script th:src="@{/webjars/bootstrap/5.3.2/dist/js/bootstrap.bundle.js}"></script>
+</body>
+</html>

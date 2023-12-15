@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Route Info</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.2/dist/css/bootstrap.css}">
+    <style>
+        .flex-container {
+            display: flex;
+            justify-content: space-between;
+        }
+        .flex-item {
+            flex: 1;
+            margin-right: 50px;
+            margin-left: 50px;
+            align-self: center;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+        <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link btn btn-outline-primary" th:href="@{/search}">Routes</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link btn btn-outline-warning" th:href="@{/tickets}">Tickets</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link btn btn-outline-success" th:href="@{/boarding}">Boarding List</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div th:if="${route}" class="mt-5 flex-container">
+    <div class="flex-item col-md-6">
+        <h2>
+            <span th:text="${route.name + '-' + route.stops.get(0).getCity().getName() + '-' + route.stops.get(route.stops.size() - 1).getCity().getName()}"></span>
+            <span th:text="${#strings.concat(route.travelTime.toHours(), ':', route.travelTime.toMinutes() % 60 < 10 ? '0' + route.travelTime.toMinutes() % 60 : route.travelTime.toMinutes() % 60) +'h'}"></span>
+        </h2>
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th>City</th>
+                <th>Time</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="stop : ${route.stops}">
+                <td th:text="${stop.getCity().getName()}"></td>
+                <td th:text="${#temporals.format(stop.getTime(), ' HH:mm dd-MM-yyyy')}"></td>
+            </tr>
+            </tbody>
+        </table>
+        <span class="input-group-text d-flex justify-content-center align-items-center" th:text="'Available: ' + ${route.getBusType().getMaxCapacity() - route.passengerCount} + ' tickets'"></span>
+    </div>
+    <div class="flex-item col-md-6">
+        <form th:action="@{/search/route/{id}/buy(id=${route.id})}" method="post">
+            <div class="mb-3">
+                <label for="firstName" class="form-label">First Name</label>
+                <input type="text" class="form-control" id="firstName" th:name="firstName" placeholder="Enter First Name">
+            </div>
+            <div class="mb-3">
+                <label for="lastName" class="form-label">Last Name</label>
+                <input type="text" class="form-control" id="lastName"  th:name="lastName" placeholder="Enter Last Name">
+            </div>
+            <input type="hidden" th:value="${fromCity}" name="fromCity">
+            <input type="hidden" th:value="${toCity}" name="toCity">
+            <input type="hidden" th:value="${route.id}" name="route">
+            <input type="hidden" th:value="${route.cost}" name="cost">
+            <input type="hidden"  name="id">
+            <button type="submit" class="btn btn-primary" th:text="${route.cost} + '$ - Buy'"></button>
+        </form>
+
+    </div>
+</div>
+<div th:if="${param.successMessage}" class="alert alert-success mt-2" role="alert">
+    <div class="alert alert-success" th:text="${param.successMessage}"></div>
+</div>
+<div th:if="${param.errorMessage}" class="alert alert-warning mt-2" role="alert">
+    <div class="alert alert-warning " th:text="${param.errorMessage}"></div>
+</div>
+<script th:src="@{/webjars/bootstrap/5.3.2/dist/js/bootstrap.bundle.js}"></script>
+</body>
+</html>
